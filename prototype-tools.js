@@ -24,38 +24,108 @@
   }
 
   //Apply Array functions
-  ArrayProto.where = function() {
-    return T.filter.apply(this, arguments);
-  };
+  Object.defineProperties(
+    ArrayProto, {
+      'where': {
+        get: function() {
+          return function() {
+            return T.filter.apply(this, arguments);
+          }
+        }
+      },
+      'contains': {
+        get: function() {
+          return function(value) {
+            var type = typeof value;
 
-  ArrayProto.findWhere = function() {
-    return T.filter.apply(this, arguments)[0];
-  };
-
-  ArrayProto.findBy = function(key, value) {
-    var attrs = {};
-    attrs[key] = value;
-    return T.filter.call(this, attrs)[0];
-  };
-
-  ArrayProto.filterBy = function(key, value) {
-    var attrs = {};
-    attrs[key] = value;
-    return T.filter.call(this, attrs);
-  };
-
-  ArrayProto.contains = function(value) {
-    var type = typeof value;
-
-    if (type === "number" || type === "string") {
-      return this.indexOf(value) !== -1;
+            if (type === "number" || type === "string") {
+              return this.indexOf(value) !== -1;
+            }
+            //Trick for compare objects
+            value = stringify(value);
+            //Use some function instead of forEach for break the loop in a more elegant way
+            return this.some(function(item) {
+              return stringify(item) === value
+            }) || false;
+          }
+        }
+      },
+      'mapBy': {
+        get: function() {
+          return function(property) {
+            return this.map(function(item) {
+              return item[property];
+            });
+          }
+        }
+      },
+      'findWhere': {
+        get: function() {
+          return function() {
+            return T.filter.apply(this, arguments)[0];
+          }
+        }
+      },
+      'findBy': {
+        get: function() {
+          return function(key, value) {
+            var attrs = {};
+            attrs[key] = value;
+            return T.filter.call(this, attrs)[0];
+          }
+        }
+      },
+      'filterBy': {
+        get: function() {
+          return function(key, value) {
+            var attrs = {};
+            attrs[key] = value;
+            return T.filter.call(this, attrs);
+          }
+        }
+      },
+      'sortBy': {
+        get: function() {
+          return function(property) {
+            return this.sort(function(a, b) {
+              if (a[property] > b[property]) {
+                return 1;
+              } else if (a[property] < b[property]) {
+                return -1;
+              }
+              return 0;
+            });
+          };
+        }
+      }
     }
-    //Trick for compare objects
-    value = stringify(value);
-    //Use some function instead of forEach for break the loop in a more elegant way
-    return this.some(function(item) {
-      return stringify(item) === value
-    }) || false;
-  };
+  );
+
+  Object.defineProperties(
+    ObjProto, {
+      'keys': {
+        get: function() {
+          return function() {
+            var keys = [];
+            for (var prop in this) {
+              keys.push(prop);
+            }
+            return keys;
+          };
+        }
+      },
+      'values': {
+        get: function() {
+          return function() {
+            var values = [];
+            for (var prop in this) {
+              values.push(this[prop]);
+            }
+            return values;
+          };
+        }
+      }
+    }
+  );
 
 }).call(this);
