@@ -15,12 +15,12 @@ var arr = [{
     lastName: 'zarco garcia',
     position: 3
   }, {
-    name: 'anna',
-    lastName: 'mateu belda',
+    name: 'Miau',
+    lastName: 'so so',
     position: 2
   }, {
-    name: 'anna',
-    lastName: 'beep',
+    name: 'Miau',
+    lastName: 'soo',
     position: 0
   },
   1
@@ -29,9 +29,20 @@ var arr = [{
 var arr2 = ['a', 'b', 'c', 1, 2];
 
 var filter = {
-  name: 'anna'
+  name: 'Miau'
 };
 
+var arrWithMethods = [{
+  getName: function() {
+    return 'hector'
+  }
+}, {
+  getName: function() {
+    return 'Paco'
+  }
+}];
+
+// console.log(arrWithMethods.mapByMethod('getName'));
 // console.log(arr.where(filter));
 // console.log(arr.findWhere(filter));
 // console.log(arr.findBy('name', 'hector'));
@@ -39,6 +50,6 @@ var filter = {
 // console.log(arr2.contains(1));
 // console.log(arr.contains(1));
 // console.log(arr.sortBy('position'));
-console.log(arr.mapBy('position'));
+// console.log(arr.mapBy('position'));
 // console.log(person.keys());
 // console.log(person.values());

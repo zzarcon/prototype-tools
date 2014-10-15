@@ -59,6 +59,15 @@
           }
         }
       },
+      'mapByMethod': {
+        get: function() {
+          return function(methodName) {
+            return this.map(function(item) {
+              return item[methodName]();
+            });
+          }
+        }
+      },
       'findWhere': {
         get: function() {
           return function() {
